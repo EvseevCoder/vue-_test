@@ -16,35 +16,27 @@ import { defineComponent } from 'vue';
 import AppTodoitem from './AppTodoitem.vue'
 import type { Todo } from '@/types/Todo';
 
-interface state {
-  todos: Todo[]
-}
 
 export default defineComponent({
   components: {
     AppTodoitem
   },
-  data(): state {
-    return {
-      todos: [
-        {id: 0, text: 'текст первой задачи', completed: true},
-        {id: 1, text: 'текст третьей задачи', completed: false},
-        {id: 2, text: 'текст второй задачи', completed: false}
-      ]
+  props: {
+    todos: {
+      type: Array as PropType<Todo[]>
     }
   },
   methods: {
     toggleTodo(id: number) {
-      const targetTodo = this.todos.find(todo => todo.id === id)
-
-      if (targetTodo) {
-        targetTodo.completed = !targetTodo.completed
-      }
+      this.$emit('toggleTodo', id)
     },
     removeTodo(id: number) {
-      this.todos = this.todos.filter((todo: Todo) => todo.id != id)
-
+      this.$emit('removeTodo', id)
     }
-  }
+  },
+  emits: {
+        toggleTodo: (id: number) => Number.isInteger(id),
+        removeTodo: (id: number) => Number.isInteger(id),
+    }
 })
 </script>
